@@ -1,31 +1,20 @@
 const express = require('express');
-const user_route = express();
-const bodyParser = require('body-parser');
-const session = require('express-session');
+const user_route = express.Router();
+const path = require('path');
 const userController = require('../controllers/userController');
 const userAuth = require('../middleware/userAuth');
+const nocache = require("nocache");
+const bodyParser = require('body-parser');
 const ejs = require('ejs');
-const path = require('path');
 
-const nocache = require('nocache');
-
-user_route.use(
-	session({
-		secret: 'hi',
-		cookie: { maxAge: 24 * 60 * 60 * 1000 * 30, sameSite: true }, // = 30 days (hh:mm:ss:ms)*days
-		saveUninitialized: false,
-		resave: false,
-	})
-);
+// Set the view engine for user views
+user_route.set('view engine', 'ejs');
+user_route.set('views', path.join(__dirname, '../views/user'));
 
 user_route.use(bodyParser.json());
 user_route.use(bodyParser.urlencoded({ extended: true }));
 
-user_route.use(express.static('public') );
-user_route.set('view engine', 'ejs');
-user_route.set('views', path.join(__dirname, '../views','users'));
-
-
+user_route.use(express.static('public'));
 user_route.use(nocache());
 
 

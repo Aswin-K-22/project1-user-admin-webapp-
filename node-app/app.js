@@ -1,53 +1,76 @@
-
 const express = require('express');
-const app = express();
 const mongoose = require('mongoose');
-const session = require("express-session");
-const path = require("path");
+const dotenv = require('dotenv');
+const path = require('path');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const nocache = require("nocache");
+const adminRoutes = require('../routers/adminRoute');
+const userRoutes = require('../routers/userRoute');
+
+dotenv.config();
+
+const app = express();
 
 // Database connection
-mongoose.connect("mongodb://localhost:27017/UserDatabase", {
-   
-});
-
-const db = mongoose.connection;
-db.on('error', (err) => {
-    console.error(err);
-});
-db.once('open', () => {
-    console.log("Database connected Successfully");
-});
+mongoose.connect("mongodb://localhost:27017/UserDatabase")
+.then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch(err => {
+    console.error('MongoDB connection error:', err);
+  });
 
 
-
+// Middleware ( JSON parsing, static files)
+app.use(express.json()); // Parse JSON request bodies
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bodies
 
 
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Set the view engine for the app
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
-app.use(
-	session({
-		secret: 'hi',
-		cookie: { maxAge: 24 * 60 * 60 * 1000 * 30, sameSite: true }, // = 30 days (hh:mm:ss:ms)*days
-		saveUninitialized: false,
-		resave: false,
-	})
-);
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.set("view engine", "ejs");
-
-// Correct way to use connect-mongo with express-session
+// Set up session middleware
+app.use(session({
+  secret: 'ecret-key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 
 
-const userRoute = require('../routers/userRoute')
-const adminRoute = require('../routers/adminRoute')
 
-app.use('/admin', adminRoute);
-app.use('/', userRoute);
+// Set up nocache middleware
+app.use(nocache());
 
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, function () {
-    console.log(`Server is running on port ${PORT}`);
+// Set up static files
+app.use(express.static('public'));
+
+app.use('/admin', adminRoutes);
+app.use('/', userRoutes);
+
+// Catch 404 and forward to error handler
+app.use((req, res, next) => {
+	const err = new Error('Not Found');
+	err.status = 404;
+	next(err);
+  });
+
+  // Error handler
+app.use((err, req, res, next) => {
+	res.status(err.status || 500);
+	res.render('error', {
+	  message: err.message,
+	  error: {}
+	});
+  });
+
+
+
+// Start the server
+const port = process.env.PORT || 3001;
+app.listen(port, () => {
+  console.log(`Server started on port ${port}`);
 });
