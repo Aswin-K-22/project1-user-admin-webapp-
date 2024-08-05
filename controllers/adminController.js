@@ -22,40 +22,7 @@ const securePassword = async (password) => {
     }
   };
 
-//for sending email verification for user adding adminside
-const addUserMail = async(name,email,password,user_id)=>{
-    try {
-        const transporter = nodemailer.createTransport({
-            host:'smtp.gmail.com',
-            port:587,
-            secure:false,
-            requireTLS:true,
-            auth:{
-                user:config.emailUser,
-                pass:config.emailPassword
-            }
-        });
-        const mailOptions = {
-            from:config.emailUser,
-            to:email,
-            subject:'Admin add you and Verify  your mail',
-            html:'<p>Hello '+name+', Please click here to <a href="http://localhost:3000/verify?id='+user_id+'">Verify </a> your mail.</p> <br><br> <b>Email:</b>' +email+'<br><b>Password:-</b>'+password+''
-        }
-        transporter.sendMail(mailOptions,function(error,info){
-            if(error)
-            {
-                console.log(error);
-            }
-            else{
-                console.log("Email has been sent:-",info.response);
-            }
-        })
 
-    } catch (error) {
-        console.log(error.message);
-        
-    }
-}
 
   //for sending email for verificaton and this for admin
 const sendVerifyMail = async (name, email, admin_id) => {
@@ -104,7 +71,7 @@ const loadLogin = async(req,res)=>{
 
         }else{
 
-        res.render('login')
+        res.render('admin/login')
 
         }
         
@@ -123,7 +90,7 @@ const verifyLogin = async(req,res)=>{
         const password = req.body.password;
 
         const adminData = await Admin.findOne({email:email});
-        console.log(' fn Veryfylogin try case');
+        console.log(' fn Veryfylogin try case ',adminData);
        
         
             
@@ -137,16 +104,17 @@ const verifyLogin = async(req,res)=>{
 
             
             req.session.admin_id = adminData._id;
-            console.log("Session created:", adminData._id);
+            console.log("Session created:", adminData._id,req.session.admin_id);
             adminSessionActive = true;  
+
             res.redirect("/admin/home");
           }else {
 
-            res.render('login',{message:"Email and password is incorrect"})
+            res.render('/login',{message:"Email and password is incorrect"})
 
         }}else{
 
-            res.render('login',{message:"Email and password is incorrect"})
+            res.render('/login',{message:"Email and password is incorrect"})
 
           }
 
@@ -161,10 +129,10 @@ const verifyLogin = async(req,res)=>{
 const loadDashboard = async(req,res)=>{
 
     try {
-        console.log("loadDashboard with upadated or current documents");
+        console.log("loadDashboard with upadated or current documents, with the session is ", req.session.admin_id);
         const adminData = await Admin.findById({_id:req.session.admin_id})
         console.log(adminData,"loadDashboard adming with session")
-        res.render('home',{admin:adminData})
+        res.render('admin/home',{admin:adminData})
     } catch (error){
         console.log(error.message)
     }
@@ -175,7 +143,7 @@ const adminDashboard = async(req,res)=>{
     try {
         console.log("adminDashboard data loading with admin session is ", req.session.admin_id);
         const userData = await Users.find({is_admin:0});
-        res.render('dashboard',{users:userData});
+        res.render('admin/dashboard',{users:userData});
 
 } catch (error) {
 
@@ -190,7 +158,7 @@ const loadRegister = async (req, res) => {
   try {
     if (sessionActive) {
     } else {
-      res.render("signin");
+      res.render("admin/signin");
     }
   } catch (error) {
     console.log(error.message);
@@ -208,7 +176,7 @@ const insertAdmin = async (req, res) => {
     });
 
     if (existingAdmin) {
-      return res.render("signup", {
+      return res.render("admin/signup", {
         message: "Email ID or Phone Number already registered!",
       });
     }
@@ -225,13 +193,13 @@ const insertAdmin = async (req, res) => {
         console.log("admin data saved in databse")
       sendVerifyMail(req.body.name, req.body.email, adminData._id);
       console.log("message sende to the mail verification");
-      res.render("signin", {
+      res.render("admin/signin", {
         message:
-          "You have succefully registered! Please goto your mail for verification!!",
+          "You have succefully registered!",
       });
     
     } else {
-      res.render("signup", { message: "Registration failed" });
+      res.render("admin/signin", { message: "Registration failed" });
     }
   } catch (error) {
     console.log(error.message);
@@ -266,7 +234,7 @@ const searchList = async (req, res) => {
             { email: { $regex: searchTerm, $options: 'i' } }
         ]
     });
-    res.render('searchResult',{users: users});
+    res.render('admin/searchResult',{users: users});
 } catch (error) {
     console.log(error.message)
 }
@@ -280,7 +248,7 @@ const editUserLoad = async(req,res)=>{
         const id = req.query.id;
         const userData = await Users.findById({_id:id});
         if(userData){
-        res.render('edit-user',{user:userData});
+        res.render('admin/edit-user',{user:userData});
         }
         else{
             res.redirect('/admin/dashboard')
@@ -322,7 +290,7 @@ const deleteUser = async(req,res)=>{
 const newUserLoad = async(req,res)=>{
     try {
       console.log("loading updated Dashboard with admin session 1 ",req.session.admin_id);
-        res.render('new-user');
+        res.render('admin/new-user');
 
     } catch (error) {
         console.log(error.message);
@@ -351,7 +319,7 @@ const newUserLoad = async(req,res)=>{
             if (existingUser) {
                 console.log("the new user data admin entered exixsting user data ")
                 
-                return res.render('new-user',{message:"Email ID or Phone Number already registered!"}); 
+                return res.render('admin/new-user',{message:"Email ID or Phone Number already registered!"}); 
             }
             console.log("addUser new data is not exists ,its goind to insert in DB")
 
@@ -380,7 +348,7 @@ const newUserLoad = async(req,res)=>{
                 res.redirect('/admin/dashboard')
 
             }else{
-                res.render('new-user',{message:'Something wrong'});
+                res.render('admin/new-user',{message:'Something wrong'});
             }
 
         } catch (error) {

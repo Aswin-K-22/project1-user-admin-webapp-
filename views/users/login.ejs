@@ -11,7 +11,11 @@
     <title>USER-PAGE</title>
   </head>
   <body>
-        <h1>User Login page</h1>
+    <nav class="navbar navbar-light bg-secondary bg-gradient ">
+      <div class="container-fluid ">
+        <span class="navbar-brand mb-0 h1 text-white">User Login page</span>
+      </div>
+    </nav>
 
 <link rel="stylesheet" href="/css/loginStyle.css">
    
@@ -25,9 +29,9 @@
           <div class="card-body p-md-5 mx-md-4">
 
             <div class="text-center">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp"
+              <img src="https://png.pngtree.com/png-vector/20191125/ourmid/pngtree-beautiful-admin-roles-line-vector-icon-png-image_2035379.jpg"
                 style="width: 185px;" alt="logo">
-              <h4 class="mt-1 mb-5 pb-1">We are The Lotus Team</h4>
+              <h4 class="mt-1 mb-5 pb-1">Welcome to UserAdminHub</h4>
               <% 
 
               if(typeof message !== 'undefined'){
@@ -60,18 +64,19 @@
               <div class="text-center pt-1 mb-5 pb-1">
                 <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit" value="login">Log
                   in</button>
-                <a class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" href="/verification" role="button">Verification</a>
-                <a class="text-muted" href="/forget">Forgot password?</a>
+                <!-- <a class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" href="/verification" role="button">Verification</a>
+                <a class="text-muted" href="/forget">Forgot password?</a> -->
               </div>
 
               
-              <form action="/signup" method="get">
+              
                 <div class="d-flex align-items-center justify-content-center pb-4">
                 <p class="mb-0 me-2">Don't have an account?</p>
-                <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-outline-danger">Create new</button>
+                <a class="btn btn-outline-danger" href="/signup" role="button">SignUp</a>
+                
               </div>
                 
-            </form>
+            
             </form>
             
            
@@ -83,10 +88,8 @@
         </div>
         <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
           <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-            <h4 class="mb-4">We are more than just a company</h4>
-            <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-              tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            <h4 class="mb-4">We are more than just a platform</h4>
+            <p class="small mb-0">At UserAdminHub, we go beyond just managing data. Our platform is designed to provide a secure, intuitive, and user-friendly experience. From seamless login and signup processes to comprehensive user data management, we've built a system that adapts to your needs. Whether you're accessing your personalized dashboard or managing user information, UserAdminHub ensures that every interaction is smooth, efficient, and reliable.</p>
           </div>
         </div>
       </div>

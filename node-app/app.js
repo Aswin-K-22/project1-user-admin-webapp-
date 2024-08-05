@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bo
 
 // Set the view engine for the app
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set("views", path.join(__dirname, "../views"))
 
 // Set up session middleware
 app.use(session({
@@ -61,7 +61,7 @@ app.use((req, res, next) => {
   // Error handler
 app.use((err, req, res, next) => {
 	res.status(err.status || 500);
-	res.render('error', {
+	res.render('admin/error', {
 	  message: err.message,
 	  error: {}
 	});

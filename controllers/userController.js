@@ -11,7 +11,7 @@ const loginPage = async (req, res) => {
       if (sessionActive) {
         console.log("Login fn in controllers of userController");
       } else {
-        res.render("Login");
+        res.render("users/login");
       }
     } catch (error) {
       console.log(error.message);
@@ -23,7 +23,8 @@ const loginPage = async (req, res) => {
       if (sessionActive) {
         console.log("Signup fn in controllers of userController");
       } else {
-        res.render("signup");
+        console.log("this is signup page")
+        res.render("users/signup");
       }
     } catch (error) {
       console.log(error.message);
@@ -41,13 +42,15 @@ const insertUserData = async (req, res) => {
             is_admin: 0,
         };
         try{
+          
       // for checking existing user
       const existingUser = await Users.findOne({
+
         $or: [{ email: req.body.email }, { mobile: req.body.mob}],
       });
-  
+      console.log(existingUser);
       if (existingUser) {
-        return res.render("signup", {
+        return res.render("users/signup", {
           message: "Email ID or Phone Number already registered!",
         });
       }
@@ -58,12 +61,12 @@ const insertUserData = async (req, res) => {
       console.log("data Succesfullyinserted in User")
       if (userData) {
         
-        res.render("signup", {
+        res.render("users/signup", {
           message:
             "You have succefully registered!"
         });
-      } else {
-        res.render("signup", { message: "Registration failed,may be your data not matching for the input areas" });
+      }else{
+        res.render("users/signup", { message: "Registration failed,may be your data not matching for the input areas" });
       }
     } catch (error) {
       console.log(error.message);
@@ -86,7 +89,7 @@ const insertUserData = async (req, res) => {
         res.redirect("/home");
           
         } else {
-          res.render("login", { message: "Email and Password are incorrect" });
+          res.render("users/login", { message: "Email and Password are incorrect" });
         }
       
     } catch (error) {
@@ -101,7 +104,7 @@ const insertUserData = async (req, res) => {
       const userData = await Users.findOne({ _id: req.session.user_id });
       sessionActive = true;
       console.log(userData,"last step of home");
-      res.render("home", { user: userData });
+      res.render("users/home", { user: userData });
     } catch (error) {
       console.log(error.message);
     }
