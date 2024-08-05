@@ -1,11 +1,9 @@
-require('dotenv').config();
-const mongoose = require("mongoose")
-const express = require("express");
-const helmet = require('helmet');
-const cors = require('cors');
-const morgan = require('morgan');
-const path = require('path');
 
+const express = require('express');
+const app = express();
+const mongoose = require('mongoose');
+const session = require("express-session");
+const path = require("path");
 
 // Database connection
 mongoose.connect("mongodb://localhost:27017/UserDatabase", {
@@ -20,22 +18,31 @@ db.once('open', () => {
     console.log("Database connected Successfully");
 });
 
-const app = express();
 
-const userRoute = require('../routers/userRoute');
-const adminRoute = require('../routers/adminRoute');
 
-app.use(helmet());
-app.use(cors());
-app.use(morgan('dev'));
+
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(
+	session({
+		secret: 'hi',
+		cookie: { maxAge: 24 * 60 * 60 * 1000 * 30, sameSite: true }, // = 30 days (hh:mm:ss:ms)*days
+		saveUninitialized: false,
+		resave: false,
+	})
+);
+
 app.use(express.static(path.join(__dirname, 'public')));
+app.set("view engine", "ejs");
 
 // Correct way to use connect-mongo with express-session
 
+
+const userRoute = require('../routers/userRoute')
+const adminRoute = require('../routers/adminRoute')
 
 app.use('/admin', adminRoute);
 app.use('/', userRoute);

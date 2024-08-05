@@ -331,7 +331,7 @@ const newUserLoad = async(req,res)=>{
 //adding new user
 
     const addUser = async(req,res)=>{
-        
+      console.log('In addUser, session:', req.session);
             console.log("new user adding addUser -fn ")
             console.log("loading updated Dashboard with admin session 1 ",req.session.admin_id);
         
