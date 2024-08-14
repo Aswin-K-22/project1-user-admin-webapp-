@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const nocache = require("nocache");
 const adminRoutes = require('../routers/adminRoute');
 const userRoutes = require('../routers/userRoute');
+const expressLayouts = require('express-ejs-layouts');
 
 dotenv.config();
 
@@ -32,6 +33,10 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bo
 app.set('view engine', 'ejs');
 app.set("views", path.join(__dirname, "../views"))
 
+// Use express-ejs-layouts
+app.use(expressLayouts);
+app.set('layout', 'layouts/main'); // Default layout to be used
+
 // Set up session middleware
 app.use(session({
   secret: 'ecret-key',
@@ -46,7 +51,7 @@ app.use(session({
 app.use(nocache());
 
 // Set up static files
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/admin', adminRoutes);
 app.use('/', userRoutes);

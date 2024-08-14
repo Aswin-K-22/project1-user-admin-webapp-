@@ -18,7 +18,7 @@ const isLogout = async (req, res, next) => {
         if (req.session.admin_id) {
             res.redirect('/admin/home');
         } else {
-            console.log("No session.admin_id ,ISLOGOUT else condition adminAuth");
+            console.log(" ISLOGOUT No session.admin_id ,ISLOGOUT else condition adminAuth");
             next();
         }
     } catch (error) {
