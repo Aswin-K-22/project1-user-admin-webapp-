@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+const dotenv = require('dotenv'); 
 const path = require('path');
 const session = require('express-session');
 const bodyParser = require('body-parser');
@@ -9,7 +9,7 @@ const adminRoutes = require('../routers/adminRoute');
 const userRoutes = require('../routers/userRoute');
 const expressLayouts = require('express-ejs-layouts');
 
-dotenv.config();
+dotenv.config(); 
 
 const app = express();
 
@@ -32,6 +32,10 @@ app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bo
 // Set the view engine for the app
 app.set('view engine', 'ejs');
 app.set("views", path.join(__dirname, "../views"))
+console.log(__dirname);
+console.log(__filename);
+
+
 
 // Use express-ejs-layouts
 app.use(expressLayouts);
@@ -75,7 +79,7 @@ app.use((err, req, res, next) => {
 
 
 // Start the server
-const port = process.env.PORT || 3001;
+const port =  3001;
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });

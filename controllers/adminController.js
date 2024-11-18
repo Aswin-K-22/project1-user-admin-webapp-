@@ -5,7 +5,7 @@ const Users = require("../models/userDataScheme");
 const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const randomstring = require('randomstring');
-const config = require('../config/config');
+//const config = require('../config/config');
 
 
 
@@ -25,40 +25,40 @@ const securePassword = async (password) => {
 
 
   //for sending email for verificaton and this for admin
-const sendVerifyMail = async (name, email, admin_id) => {
-    try {
-      const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
-        requireTLS: true,
-        auth: {
-          user: config.emailUser,
-          pass: config.emailPassword,
-        },
-      });
-      const mailOptions = {
-        from: config.emailUser,
-        to: email,
-        subject: "Reset Password",
-        html:
-          "<p>Hello " +
-          name +
-          ', Please click here to <a href="http://localhost:3000/forget-password?token=' +
-          token +
-          '">Reset </a> your password.</p>',
-      };
-      transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log("Email has been sent:-", info.response);
-        }
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
+// const sendVerifyMail = async (name, email, admin_id) => {
+//     try {
+//       const transporter = nodemailer.createTransport({
+//         host: "smtp.gmail.com",
+//         port: 587,
+//         secure: false,
+//         requireTLS: true,
+//         auth: {
+//           user: config.emailUser,
+//           pass: config.emailPassword,
+//         },
+//       });
+//       const mailOptions = {
+//         from: config.emailUser,
+//         to: email,
+//         subject: "Reset Password",
+//         html:
+//           "<p>Hello " +
+//           name +
+//           ', Please click here to <a href="http://localhost:3000/forget-password?token=' +
+//           token +
+//           '">Reset </a> your password.</p>',
+//       };
+//       transporter.sendMail(mailOptions, function (error, info) {
+//         if (error) {
+//           console.log(error);
+//         } else {
+//           console.log("Email has been sent:-", info.response);
+//         }
+//       });
+//     } catch (error) {
+//       console.log(error.message);
+//     }
+//   };
 
 //login page of admin
 const loadLogin = async(req,res)=>{
