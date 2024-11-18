@@ -189,18 +189,19 @@ const insertAdmin = async (req, res) => {
       is_admin: 1,
     });
     const adminData = await admin.save();
-    if (adminData) {
-        console.log("admin data saved in databse")
-      sendVerifyMail(req.body.name, req.body.email, adminData._id);
-      console.log("message sende to the mail verification");
-      res.render("admin/signin", {
-        message:
-          "You have succefully registered!",
-      });
+    // if (adminData) {
+    //     console.log("admin data saved in databse")
+    //   sendVerifyMail(req.body.name, req.body.email, adminData._id);
+    //   console.log("message sende to the mail verification");
+    //   res.render("admin/signin", {
+    //     message:
+    //       "You have succefully registered!",
+    //   });
     
-    } else {
-      res.render("admin/signin", { message: "Registration failed" });
-    }
+    // } else {
+    //   res.render("admin/signin", { message: "Registration failed" });
+    // }
+    res.redirect('/admin');
   } catch (error) {
     console.log(error.message);
   }
